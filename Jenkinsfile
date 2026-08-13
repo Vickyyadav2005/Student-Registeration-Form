@@ -1,10 +1,5 @@
 pipeline {
-
     agent any
-
-    environment {
-        PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
-    }
 
     stages {
 
@@ -22,9 +17,9 @@ pipeline {
                 test -f style.css
                 test -f script.js
                 test -f student.js
+                test -f student.json
                 test -f test.js
                 test -f Jenkinsfile
-
                 echo "All required project files are available."
                 '''
             }
@@ -36,7 +31,6 @@ pipeline {
                 node --check script.js
                 node --check student.js
                 node --check test.js
-
                 echo "JavaScript files checked successfully."
                 '''
             }
@@ -50,7 +44,6 @@ pipeline {
                 grep -q 'id="mobile"' index.html
                 grep -q 'id="branch"' index.html
                 grep -q 'id="password"' index.html
-
                 echo "HTML validation completed successfully."
                 '''
             }
@@ -59,17 +52,16 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh '''
-                test -f index.html && echo "Test 1: index.html - PASS"
-                test -f style.css && echo "Test 2: style.css - PASS"
-                test -f script.js && echo "Test 3: script.js - PASS"
-                test -f student.js && echo "Test 4: student.js - PASS"
-                test -f test.js && echo "Test 5: test.js - PASS"
+                node test.js
                 '''
             }
         }
     }
 
     post {
+        always {
+            echo 'Jenkins pipeline finished.'
+        }
 
         success {
             echo 'Student Registration project built successfully.'
@@ -77,10 +69,6 @@ pipeline {
 
         failure {
             echo 'Student Registration project build failed.'
-        }
-
-        always {
-            echo 'Jenkins pipeline finished.'
         }
     }
 }

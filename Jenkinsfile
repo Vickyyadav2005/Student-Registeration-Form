@@ -28,9 +28,9 @@ pipeline {
         stage('Check JavaScript') {
             steps {
                 sh '''
-                node --check script.js
-                node --check student.js
-                node --check test.js
+                /opt/homebrew/bin/node --check script.js
+                /opt/homebrew/bin/node --check student.js
+                /opt/homebrew/bin/node --check test.js
                 echo "JavaScript files checked successfully."
                 '''
             }
@@ -52,7 +52,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh '''
-                node test.js
+                /opt/homebrew/bin/node test.js
                 '''
             }
         }
